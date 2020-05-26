@@ -13,18 +13,31 @@ Nota: Investigue en el repositorio github del proyecto PySimpleGUI posibles ejem
 """
 import csv
 import PySimpleGUI as sg
-#import random
+import random
 
-#Functions
+# Functions
+# calcula la proporcion
+def cal_proporcion(valores):
+    # devuelve tupla con el maximo: 0 universidad, 1 valor
+    maximo = max(valores, key=lambda x: x[1]) [1]
+    # limitamos a 75 pixeles como el tamano mas grande.
+    tam_max = 75 
+    return tam_max / int(maximo)
 
-
-# def graficar(valores, grafico):
-#     proporcion = calcular_proporcion(valores)
-
-#     for valor in valores:
-#         tamano = proporcion * valor[1]
-#         posicion = (random.randrange(GRAFICO_ANCHO), random.randrange(GRAFICO_ALTO))
-#         grafico.DrawCircle( posicion, tamano, fill_color='black', line_color='white')
+# constantes para el grafico
+graf_ancho = 400
+graf_alto = 170
+# grafica la proporcion de los valores de la cantidad de mujeres
+def graficar(grafico, valores):
+    # calcula la proporcion 
+    proporcion = cal_proporcion(valores)
+    for valor in valores:
+        # depende la proporcion va ser el diametro
+        tam = proporcion * valor[1]
+        # hace un random dentro del alto y ancho predefinido
+        posicion = (random.randrange(graf_ancho), random.randrange(graf_alto))
+        # genero un circulo por cada valor
+        grafico.DrawCircle(posicion, tam, fill_color='black', line_color='white')
 
 #ordena una lista de mayor a menor
 def ordenar(list_cant_muj):
@@ -38,7 +51,6 @@ def update_listbox(listbox, list_cant_muj):
 col_cant = 10
 # columna de las universidades
 col_uni = 2
-
 # abre un archivo csv y devuelve una lista de cantidad de muejeres por universidad
 def leer(origen):
     #creo un diccionario para la cantidad 
@@ -63,7 +75,6 @@ def leer(origen):
     return cant
 
 #PP
-
 #layout
 ancho = 400
 alto = 170
@@ -80,14 +91,11 @@ win = sg.Window('Practica_04 | Ejercicio_07', layout=menu, finalize=True)
 # ejecucion
 while True:
     event, values = win.read()
-#   print('values:\n', values)
     #guardo en origen el path del archivo a leer
     origen = values[0]
-#    print('origen:\n', origen)
     #cierro ventana o apreto en cancelar
     if event is None or event == 'Cancelar':
         break
-    
     if event is 'OK':
         #habilito el boton ordenar
         win.FindElement('boton_ordenar').Update(disabled=False)
@@ -96,12 +104,10 @@ while True:
         dic_cant_muj = leer(origen)
         #convierto el diccionario usado en leer en una lista para actualizar el listbox
         list_cant_muj = dic_cant_muj.items()
+        # grafico proporcional de la lista
+        graficar(win.FindElement('grafico'), list_cant_muj)
         # actualizo el listbox
         update_listbox(win.FindElement('Universidad'), list_cant_muj)
-
-        # grafico proporcional de la lista
-
-
     if event is 'boton_ordenar' and archivoOK:
         list_cant_muj_ord = ordenar(list_cant_muj)
         update_listbox(win.FindElement('Universidad'), list_cant_muj_ord)
