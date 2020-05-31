@@ -11,8 +11,24 @@ import json
 import PySimpleGUI as sg
 
 #2B
-def modificoDatos():
-    pass
+def modificoDatos(jugadores):
+    layout = [sg.Text('Nombre', size=(15, 1)), sg.InputText()], [sg.Text('Nivel', size=(15, 1)), sg.InputText()], [sg.Text('Puntaje', size=(15, 1)), sg.InputText()], [sg.Text('Tiempo', size=(15, 1)), sg.InputText()], [sg.OK(), sg.Button('Cancelar')]
+    win = sg.Window('Modificar datos:').Layout(layout)
+    while True:
+        event, values = win.read()
+        if event is None or event == 'Cancelar':
+            break
+        if event == 'OK':
+            # si el jugador existe
+            if values[0] in jugadores.keys():
+                jugadores[values[0]]['nivel'] = values[1]
+                jugadores[values[0]]['puntaje'] = values[2]
+                jugadores[values[0]]['tiempo'] = values[3]
+            else:
+                jugadores[values[0]] = {'nivel':values[1],'puntaje':values[2],'tiempo':values[3]}
+            win.close()
+
+    return(jugadores)
 
 #2A
 def guardoDatos(jugadores):
@@ -67,18 +83,20 @@ jugadores = {
 
 op = 9
 while op != 0:
-    op = int(input('1: Buscar un Jugador\n2: Lista de Jugadores\n3: Jugador con Mayor Puntaje\n4: Agregar Jugada\n5: Ranking 10 Mejores Puntajes\n6: Guardar los Datos\n0: para terminar\n'))
+    op = int(input('1: Modificar un Jugador\n2: Buscar un Jugador\n3: Lista de Jugadores\n4: Jugador con Mayor Puntaje\n5: Agregar Jugada\n6: Ranking 10 Mejores Puntajes\n7: Guardar los Datos\n0: para terminar\n'))
     if op == 1:
-        buscar_jug(jugadores)
+        modificoDatos(jugadores)
     elif op == 2:
-        listar_jug(jugadores)
+        buscar_jug(jugadores)
     elif op == 3:
-        mayor_puntaje(jugadores)
+        listar_jug(jugadores)
     elif op == 4:
-        agregar_jugada(jugadores)
+        mayor_puntaje(jugadores)
     elif op == 5:
-        ranking(jugadores)
+        agregar_jugada(jugadores)
     elif op == 6:
+        ranking(jugadores)
+    elif op == 7:
         guardoDatos(jugadores)
 
 print('<<< FIN >>>\n',)
