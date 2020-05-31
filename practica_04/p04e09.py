@@ -52,7 +52,8 @@ class buttonB():
         self.state = 0   #si state es 0, no tiene valor, si es 1 ya tiene valor
         self.disabled = False
         self.key = (x,y)
-        self.button = sg.Button(self.name, 
+        self.button = sg.Button(self.name,
+            size=(4,2), 
             auto_size_button = False,
             border_width = 2,
             disabled = self.disabled,
