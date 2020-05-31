@@ -52,8 +52,7 @@ class buttonB():
         self.state = 0   #si state es 0, no tiene valor, si es 1 ya tiene valor
         self.disabled = False
         self.key = (x,y)
-        self.button = sg.Button(self.name,
-            size=(4,2), 
+        self.button = sg.Button(self.name, 
             auto_size_button = False,
             border_width = 2,
             disabled = self.disabled,
@@ -141,9 +140,12 @@ while True:
         break
     # inicializo el tablero A de 10x10
     disable_A()
+    print(event)
+    x = event[0]
+    y = event[1]
     # accion de la habilidad
     if (ok):
-        x, y = event
+
         # guardo la letra del atril
         letra = b1[x][y].getLetra()
         #control
@@ -153,7 +155,6 @@ while True:
         # deshabilito en el atril el boton de la letra
         disable_B()
     else:
-        x, y = event
         # le asigno la letra del atril en el grid
         b2[x][y].setLetra(letra)
         #control
